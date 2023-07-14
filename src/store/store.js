@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import courseTests from "./modules/courseTests";
 import personTypes from "./modules/personTypes";
 import professions from "./modules/professions";
+import courses from "./modules/courses";
 import axios from "axios";
 
 const store = createStore({
@@ -16,7 +17,8 @@ const store = createStore({
     }
   },
   modules: {
-    // courseTests,
+    //courseTests,
+    courses,
     personTypes,
     professions
   },

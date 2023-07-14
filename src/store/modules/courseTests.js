@@ -1,3 +1,5 @@
+import httpClient from "../../utils/httpClient"
+
 export default {
   actions: {
     // getTests({ commit }) {
