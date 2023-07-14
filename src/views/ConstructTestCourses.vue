@@ -15,7 +15,7 @@
         color="#1976D2"
         class="justify-end"
         style="color: white"
-        @click="addQuestion()"
+        @click="formSubmit"
         >Сохранить</v-btn
       >
     </div>
@@ -202,7 +202,7 @@
 </style>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 export default {
   data: () => ({
     questions: [{ type: "qwe", text: "questionText", img: "qwe", rightAnswer: "" }],
@@ -229,11 +229,20 @@ export default {
     ],
   }),
   methods: {
-    ...mapMutations(["createTest"]),
+    ...mapActions('testsModule',["createTest"]),
     formSubmit() {
       this.createTest({
-        title: this.courseName,
+        name: this.courseName,
         description: this.description,
+        linkedCoursesIds: [0],
+        questionsList: this.questions.map(q => ({
+          name: q.text,
+          description: q.text,
+          type: (this.questionTypes.findIndex(t => t == q.type) == -1 ? 0 : this.questionTypes.findIndex(t => t == q.type)),//TODO: переделать
+          possibleAnswers: ["sdf"],//this.chooseQuestion,
+          rightAnswers: [q.rightAnswer],
+          contentType: 0
+        }))
       });
       this.courseName = this.description = "";
     },

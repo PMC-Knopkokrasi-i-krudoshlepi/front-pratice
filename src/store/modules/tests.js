@@ -1,22 +1,17 @@
 import httpClient from "../../utils/httpClient"
 
 export default {
+  namespaced: true,
   actions: {
-    // getTests({ commit }) {
-    //   axios
-    //     .get("http://localhost:8080/api/tests/1399124932")
-    //     .then((r) => r.data)
-    //     .then((tests) => {
-    //       commit("SET_TESTS", tests);
-    //     });
-    // },
+    createTest(state, course) {
+      console.log(JSON.stringify(course));
+      httpClient.post("tests/create", course)
+                .catch(err => console.log(err));
+    }
   },
   mutations: {
     updateTests(state, tests) {
       state.tests = tests;
-    },
-    createTest(state, newTest) {
-      state.tests.unshift(newTest);
     },
     SET_TESTS (state, tests) {
       state.tests = tests

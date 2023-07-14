@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import courseTests from "./modules/courseTests";
+import testsModule from "./modules/tests";
 import personTypes from "./modules/personTypes";
 import professions from "./modules/professions";
 import courses from "./modules/courses";
@@ -17,7 +17,7 @@ const store = createStore({
     }
   },
   modules: {
-    //courseTests,
+    testsModule,
     courses,
     personTypes,
     professions
