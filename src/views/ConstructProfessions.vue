@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -137,19 +139,22 @@ export default {
     };
   },
   methods: {
+    ...mapActions('professions',[
+      'publishProfession'
+    ]),
     saveProfesson: function () {
       this.profession.push({
         name: this.name,
         description: this.description,
-        skills: this.skills,
-        todos: this.todos,
-        salaryFrom: this.salaryFrom,
-        salaryTo: this.salaryTo,
-        currency: this.currency
+        skills: [this.skills],
+        tasks: this.todos,
+        sallaryFrom: parseInt(this.salaryFrom),
+        sallaryTo: parseInt(this.salaryTo),
+        //currency: this.currency
       });
-      let json = JSON.stringify(this.profession)
+      let json = JSON.stringify(this.profession[0])
+      this.publishProfession(this.profession[0]);
       console.log(json);
-      
     },
   },
 };
