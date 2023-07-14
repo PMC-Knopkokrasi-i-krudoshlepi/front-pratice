@@ -1,4 +1,7 @@
+import httpClient from "../../utils/httpClient"
+
 export default {
+  namespaced: true,
   actions: {},
   mutations: {},
   state: {
@@ -11,8 +14,9 @@ export default {
     ],
   },
   getters: {
-    allTypes(state) {
-      return state.personType;
+    async allTypes(state) {
+      const {data} = await httpClient.get("identity/getAllIdentities");
+      return data;
     },
   },
 };
