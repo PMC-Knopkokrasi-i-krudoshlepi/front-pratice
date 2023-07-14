@@ -2,7 +2,12 @@ import httpClient from "../../utils/httpClient"
 
 export default {
   namespaced: true,
-  actions: {},
+  actions: {
+    publishType({commit}, type){
+      httpClient.post("identity/addIdentity", type)
+                .catch(err => console.log(err));
+    }
+  },
   mutations: {},
   state: {
     personType: [

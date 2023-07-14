@@ -19,7 +19,7 @@
               style="color: white"
               color="#3E80E4"
               variant="flat"
-              to="/person-type-constructor"
+              @click="publishPersonalityType"
             >
               Сохранить
             </v-btn>
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -88,18 +89,32 @@ export default {
       search: "",
       selected: [],
       professions: [
-        { name: "Аналитик" },
-        { name: "Программист" },
-        { name: "Дизайнер" },
-        { name: "Иллюстратор" },
-        { name: "Робототехник" },
+        // { name: "Аналитик" },
+        // { name: "Программист" },
+        // { name: "Дизайнер" },
+        // { name: "Иллюстратор" },
+        // { name: "Робототехник" },
       ],
     };
   },
   methods: {
+    ...mapActions('personTypes',
+      [
+        'publishType'
+      ]),
     addToSelected(item) {},
+    publishPersonalityType(){
+      const type = {
+        name: this.personType,
+        description: this.description
+      }
+      this.publishType(type);
+    }
   },
   computed: {
+    ...mapGetters('personTypes',{
+      getAllPersonTypes: 'allTypes'
+    }),
     filteredList() {
       return this.professions.filter((profession) => {
         return profession.name
@@ -107,6 +122,10 @@ export default {
           .includes(this.search.toLowerCase());
       });
     },
+  },
+  async mounted() {
+    this.professions = await this.getAllPersonTypes;
+    this.professions = this.professions.map(prof => ({name: prof.name}));
   },
 };
 </script>
