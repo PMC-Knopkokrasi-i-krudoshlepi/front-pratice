@@ -4,7 +4,7 @@
       <div class="d-flex">
         <h1 class="ma-2 pa-2 me-auto">Типы личности</h1>
         <v-btn
-          class="ma-2 pa-2"
+          class="ma-2 pa-2 mt-5"
           prepend-icon="mdi-plus"
           variant="outlined"
           color="#1976D2"

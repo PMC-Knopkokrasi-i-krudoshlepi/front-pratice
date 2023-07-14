@@ -52,8 +52,45 @@
       </div>
     </div>
     <div class="main mt-5 mx-5">
+      <div class="question">
+        <v-card
+          class="my-5"
+          align="left"
+          v-for="question in questionsList"
+          :key="question"
+        >
+          <v-card-item>
+            <v-card-title class="d-flex flex-row">
+              <v-row>
+                <v-sheet class="ma-2 pa-2">
+                  <p>{{ question.name }}</p>
+                </v-sheet>
+                <v-col order="12">
+                  <v-sheet class="justify-end align-start">
+                    <div class="d-flex justify-end">
+                      <v-btn class="mr-3" variant="outlined" color="#1976D2"
+                        >Редактировать</v-btn
+                      >
+                      <v-btn variant="outlined" color="#D32F2F">Удалить</v-btn>
+                    </div>
+                  </v-sheet>
+                </v-col>
+              </v-row>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <div class="answers">
+              <div
+                v-if="question.questType == 'Несколько из списка'"
+                class="several"
+              ></div>
+            </div>
+            <br />
+          </v-card-text>
+        </v-card>
+      </div>
       <div class="create-question">
-        <v-card class="pt-5 px-5">
+        <v-card class="pt-5 px-5 mb-5">
           <div class="card-head">
             <v-sheet class="d-flex me-auto">
               <v-select
@@ -86,17 +123,72 @@
               >
             </v-sheet>
           </div>
-          <v-text-field variant="outlined" label="Текст вопроса"></v-text-field>
-          <div v-if="questType == 'Один из списка'" class=" text-center">
+          <v-text-field
+            variant="outlined"
+            label="Текст вопроса"
+            v-model="questionName"
+          ></v-text-field>
+          <div v-if="questType == 'Несколько из списка'" class="text-center">
             <v-text-field
-              v-model="possibleAnsToOneFromList"
+              v-model="possibleAnsToseveralAnsList"
               variant="outlined"
               label="Введите один из возможных ответов"
             ></v-text-field>
+
             <div class="possible-answers">
-              <div v-for="answ in oneFromList" :key="answ">
-                <p>{{ answ }}</p>
+              <div
+                v-for="(answ, index) in possibleAnswers"
+                :key="index"
+                class="d-flex"
+              >
+                <v-checkbox
+                  :value="answ"
+                  v-model="rightAnswers"
+                  :label="`${answ.text}`"
+                >
+                </v-checkbox>
+                <v-btn
+                  variant="plain"
+                  icon="mdi-minus"
+                  v-on:click="possibleAnswers.splice(index, 1)"
+                ></v-btn>
               </div>
+            </div>
+            <v-btn
+              class="mb-3 mx-auto"
+              color="#007DFF"
+              prepend-icon="mdi-plus"
+              variant="outlined"
+              @click="addToSeveral"
+              >Добавить вариант</v-btn
+            >
+          </div>
+          <div v-if="questType == 'Один из списка'" class="text-center">
+            <div class="text-center">
+              <v-text-field
+                v-model="possibleAnsToOneFromList"
+                variant="outlined"
+                label="Введите один из возможных ответов"
+              ></v-text-field>
+              <v-radio-group class="possible-answers">
+                <div
+                  v-for="(answ, index) in possibleAnswers"
+                  :key="index"
+                  class="d-flex"
+                >
+                  <v-radio
+                    :value="answ"
+                    v-model="rightAnswers"
+                    :label="`${answ.text}`"
+                  >
+                  </v-radio>
+                  <v-btn
+                    variant="plain"
+                    icon="mdi-minus"
+                    v-on:click="possibleAnswers.splice(index, 1)"
+                  ></v-btn>
+                </div>
+              </v-radio-group>
             </div>
             <v-btn
               class="mb-3 mx-auto"
@@ -107,21 +199,11 @@
               >Добавить вариант</v-btn
             >
           </div>
-          <div v-if="questType == 'Несколько из списка'" class=" text-center">
-            <v-btn
-              class="mb-3 mx-auto"
-              color="#007DFF"
-              prepend-icon="mdi-plus"
-              variant="outlined"
-              @click="addToSeveral"
-              >Добавить вариант</v-btn
-            >
-          </div>
-          <div v-if="questType == 'Свободный ответ'">
+          <div v-if="questType == 'Свободный ответ'" class="text-center">
             <v-text-field
-              label="Введите правильный ответ"
+              label="Введите вариант ответа"
               variant="outlined"
-              v-model="rightAnsToFreeQuestion"
+              v-model="rightAnswerToFreeQuestion"
             ></v-text-field>
             <v-btn
               class="mb-3 mx-auto"
@@ -133,9 +215,6 @@
             >
           </div>
         </v-card>
-        <v-btn class="mt-5" color="#007DFF" variant="outlined" block prepend-icon="mdi-plus"
-          >Создать вопрос</v-btn
-        >
       </div>
     </div>
   </div>
@@ -151,37 +230,40 @@
 export default {
   data() {
     return {
-      items: [
-        "Один из списка",
-        "Свободный ответ",
-        "Несколько из списка",
-      ],
+      items: ["Один из списка", "Свободный ответ", "Несколько из списка"],
+      rightAnswers: [],
+      questionName: "",
       questType: "",
-      oneFromList: [{}],
-      freeAnswer: "",
-      severalAnsList: [{}],
-      questions: [{}],
+      questionsList: [],
+      possibleAnswers: [],
       dialog: false,
       possibleAnsToOneFromList: "",
-      rightAnsToFreeQuestion: "",
+      possibleAnsToseveralAnsList: "",
+      rightAnswerToFreeQuestion: "",
     };
   },
   methods: {
     addToOneFromList: function () {
-      this.oneFromList.push(this.possibleAnsToOneFromList);
-      for (let i = 0; i < this.oneFromList.length; i++) {
-        console.log(this.oneFromList[i]);
-      }
+      this.possibleAnswers.push({ text: this.possibleAnsToOneFromList });
+      this.possibleAnsToOneFromList = "";
     },
     addToSeveral: function () {
-      console.log("Добавлен");
+      this.possibleAnswers.push({ text: this.possibleAnsToseveralAnsList });
+      this.possibleAnsToseveralAnsList = "";
     },
     addToFreeAnswer: function () {
-      console.log("Добавлен");
+      this.possibleAnswers.push({ text: this.rightAnswerToFreeQuestion });
+      this.rightAnswerToFreeQuestion = "";
     },
     saveQuestion: function () {
-      console.log("Вопрос успешно сохранен");
-      // this.questions.push()
+      this.questionsList.push({
+        name: this.questionName,
+        questionType: this.questType,
+        rightAnswers: this.rightAnswers,
+        possibleAnswers: this.possibleAnswers,
+        rightAnswers: this.rightAnswers,
+      });
+      console.log(this.questionsList);
     },
     deleteQuestion: function () {
       console.log("Вопрос успешно удален");
