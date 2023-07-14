@@ -4,14 +4,18 @@ export default {
     namespaced: true,
     actions: {
         publishProfession({commit}, profession){
-            httpClient.post("api/profession/create", profession)
+            httpClient.post("profession/create", profession)
                 .then(res => console.log(res.data))
                 .catch(err => console.log(err));
-            console.log("asd");
         }
     },
     mutations: {},
     state: {},
-    getters: {},
+    getters: {
+        async allProfessions(state){
+            const {data} = await httpClient.get("profession/getAllProfessions");
+            return data;
+        }
+    },
   };
   

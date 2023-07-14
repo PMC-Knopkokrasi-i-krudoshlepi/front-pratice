@@ -11,20 +11,29 @@
           to="/professions-constructor"
           >Добавить</v-btn
         >
+        <v-btn
+          class="ma-2 pa-2 mt-5"
+          prepend-icon="mdi-plus"
+          variant="outlined"
+          color="#2871E6"
+          @click="printAll"
+          >Test</v-btn
+        >
       </div>
     </div>
     <v-divider></v-divider>
     <Card 
         v-for="profession in professions" 
-        :key="profession" 
-        :title="profession.title" 
-        :money="profession.money" 
+        :key="profession.name" 
+        :title="profession.name" 
+        :money="profession.sallaryFrom" 
         :description="profession.description" />
   </div>
 </template>
 
 <script>
 import Card from '../components/Professions/Card.vue';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     Card
@@ -39,5 +48,20 @@ export default {
       },
     ],
   }),
+  methods: {
+    printAll(){
+      console.log(this.allProfessions.Result);
+    }
+  },
+  computed:{
+    ...mapGetters('professions',
+      {
+        allProfessions: 'allProfessions'
+      }
+    )
+  },
+  async mounted() {
+    this.professions = await this.allProfessions
+  },
 };
 </script>
