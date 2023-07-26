@@ -20,9 +20,4 @@ export default {
   state: {
     tests: [],
   },
-  // getters: {
-  //   allTests(state) {
-  //     return state.tests;
-  //   },
-  // },
 };

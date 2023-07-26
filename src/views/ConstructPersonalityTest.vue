@@ -13,15 +13,15 @@
             >
           </v-sheet>
           <v-sheet class="ma-2 pa-2">
-            <v-btn color="#1976D2" class="justify-end" style="color: white"
+            <v-btn color="#1976D2" class="justify-end" style="color: white" @click="formSubmit"
               >Сохранить</v-btn
             >
           </v-sheet>
         </v-row>
       </div>
       <div class="head-inputs px-5">
-        <v-text-field label="Название теста"> </v-text-field>
-        <v-text-field label="Описание к тесту"></v-text-field>
+        <v-text-field label="Название теста" v-model="testName"> </v-text-field>
+        <v-text-field label="Описание к тесту" v-model="testDescription"></v-text-field>
       </div>
       <div class="add-courses px-5 py-5">
         <v-dialog v-model="dialog" width="auto">
@@ -243,10 +243,13 @@
 </style>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       items: ["Один из списка", "Свободный ответ", "Несколько из списка"],
+      testName: "",
+      testDescription: "",
       rightAnswers: [],
       questionName: "",
       questType: "",
@@ -259,6 +262,23 @@ export default {
     };
   },
   methods: {
+    ...mapActions('tests',["createTest"]),
+    formSubmit() {
+      this.createTest({
+        name: this.testName,
+        description: this.testDescription,
+        linkedCoursesIds: [0],
+        questionsList: this.questionsList.map(q => ({
+          name: q.name,
+          description: q.name,
+          type: (this.items.findIndex(t => t == q.questionType) == -1 ? 0 : this.items.findIndex(t => t == q.questionType)),//TODO: переделать
+          possibleAnswers: q.possibleAnswers.map(ans => ans.text),//this.chooseQuestion,
+          rightAnswers: [...q.rightAnswers],
+          contentType: 0
+        }))
+      });
+      //this.courseName = this.description = "";
+    },
     addToOneFromList: function () {
       this.possibleAnswers.push({ text: this.possibleAnsToOneFromList });
       this.possibleAnsToOneFromList = "";
@@ -275,7 +295,7 @@ export default {
       this.questionsList.push({
         name: this.questionName,
         questionType: this.questType,
-        rightAnswers: this.rightAnswers,
+        rightAnswers: [...this.rightAnswers],
         possibleAnswers: [...this.possibleAnswers],
       });
       console.log(this.questionsList);

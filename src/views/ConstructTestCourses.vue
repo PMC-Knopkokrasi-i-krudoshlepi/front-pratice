@@ -229,7 +229,7 @@ export default {
     ],
   }),
   methods: {
-    ...mapActions('testsModule',["createTest"]),
+    ...mapActions('tests',["createTest"]),
     formSubmit() {
       this.createTest({
         name: this.courseName,
