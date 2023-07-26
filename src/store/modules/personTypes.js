@@ -1,5 +1,13 @@
+import httpClient from "../../utils/httpClient"
+
 export default {
-  actions: {},
+  namespaced: true,
+  actions: {
+    publishType({commit}, type){
+      httpClient.post("identity/addIdentity", type)
+                .catch(err => console.log(err));
+    }
+  },
   mutations: {},
   state: {
     personType: [
@@ -11,8 +19,9 @@ export default {
     ],
   },
   getters: {
-    allTypes(state) {
-      return state.personType;
+    async allTypes(state) {
+      const {data} = await httpClient.get("identity/getAllIdentities");
+      return data;
     },
   },
 };

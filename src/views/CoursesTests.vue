@@ -44,7 +44,7 @@ export default {
       const { data } = await httpClient.get("/api/tests/753444840");
       this.tests = data;
     } catch (error) {
-      this.errors.push(e);
+      this.errors.push(error);
     }
   },
 };

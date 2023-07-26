@@ -16,6 +16,7 @@
           style="color: white"
           color="#3E80E4"
           variant="flat"
+          @click="publishThisCourse"
           >Сохранить</v-btn
         >
       </div>
@@ -31,6 +32,7 @@
               bg-color="white"
               color="#2196F3"
               label="Название типа личности"
+              v-model="identTypeName"
               variant="outlined"
               clearable
               hide-details="auto"
@@ -39,6 +41,7 @@
               bg-color="white"
               color="#2196F3"
               class="mt-3"
+              v-model="identTypeDescription"
               label="Описание типа личности"
               variant="outlined"
               clearable
@@ -117,21 +120,39 @@
 </style>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   data() {
     return {
+      identTypeName: "",
+      identTypeDescription: "",
       durations: [],
       numberValue: "",
       durationValue: "",
     };
   },
   methods: {
+    ...mapActions('courses',
+      [
+        'publishCourse'
+      ]
+    ),
     addDuration: function () {
       this.durations.push({
         numberValue: this.numberValue,
         durationValue: this.durationValue,
       });
     },
+    publishThisCourse(){
+      const course = {
+        name: this.identTypeName,
+        description: this.identTypeDescription,
+        startDate: "2.02",
+        endDate: "09.08"
+      };
+      this.publishCourse(course);
+    }
   },
 };
 </script>

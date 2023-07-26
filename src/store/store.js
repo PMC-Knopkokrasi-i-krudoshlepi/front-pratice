@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
-import courseTests from "./modules/courseTests";
+import testsModule from "./modules/tests";
 import personTypes from "./modules/personTypes";
+import professions from "./modules/professions";
+import courses from "./modules/courses";
 import axios from "axios";
-
 
 const store = createStore({
   actions: {
@@ -16,8 +17,10 @@ const store = createStore({
     }
   },
   modules: {
-    // courseTests,
+    testsModule,
+    courses,
     personTypes,
+    professions
   },
   state() {
     return {
