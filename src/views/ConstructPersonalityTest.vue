@@ -56,8 +56,8 @@
         <v-card
           class="my-5"
           align="left"
-          v-for="question in questionsList"
-          :key="question"
+          v-for="(question, index) in questionsList"
+          :key="index"
         >
           <v-card-item>
             <v-card-title class="d-flex flex-row">
@@ -71,7 +71,12 @@
                       <v-btn class="mr-3" variant="outlined" color="#1976D2"
                         >Редактировать</v-btn
                       >
-                      <v-btn variant="outlined" color="#D32F2F">Удалить</v-btn>
+                      <v-btn
+                        variant="outlined"
+                        color="#D32F2F"
+                        v-on:click="questionsList.splice(index, 1)"
+                        >Удалить</v-btn
+                      >
                     </div>
                   </v-sheet>
                 </v-col>
@@ -80,10 +85,21 @@
           </v-card-item>
           <v-card-text>
             <div class="answers">
-              <div
-                v-if="question.questType == 'Несколько из списка'"
-                class="several"
-              ></div>
+              <div v-if="question.questionType === 'Один из списка'">
+                <v-radio-group>
+                  <div>
+                    <v-radio
+                      v-for="(answer, index) in question.possibleAnswers"
+                      :value="answer"
+                      :key="index"
+                      :label="answer.text"
+                    ></v-radio>
+                  </div>
+                </v-radio-group>
+              </div>
+              <div v-if="question.questionType === 'Свободный ответ'">
+                <v-text-field label="Введите ответ"></v-text-field>
+              </div>
             </div>
             <br />
           </v-card-text>
@@ -260,8 +276,7 @@ export default {
         name: this.questionName,
         questionType: this.questType,
         rightAnswers: this.rightAnswers,
-        possibleAnswers: this.possibleAnswers,
-        rightAnswers: this.rightAnswers,
+        possibleAnswers: [...this.possibleAnswers],
       });
       console.log(this.questionsList);
     },
