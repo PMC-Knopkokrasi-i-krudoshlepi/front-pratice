@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { mapGetters } from 'vuex';
+</script>
 <template>
   <div class="container mx-10">
     <div class="header">
@@ -75,5 +77,19 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters("personalityTest",{
+      allTests: "allTests"
+    })
+  },
+  async mounted(){
+    const added = (await this.allTests).map(t => ({
+      title: t.name,
+      description: t.description,
+      time: t.questionsList && t.questionsList.length //TODO: переделать
+    }))
+    this.tests = [...this.tests, ...added]
+    console.log(this.tests);
+  }
 };
 </script>

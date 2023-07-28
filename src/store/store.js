@@ -3,6 +3,7 @@ import tests from "./modules/courseTests";
 import personTypes from "./modules/personTypes";
 import professions from "./modules/professions";
 import courses from "./modules/courses";
+import personalityTest from "./modules/personalityTest"
 import axios from "axios";
 
 const store = createStore({
@@ -17,6 +18,7 @@ const store = createStore({
     }
   },
   modules: {
+    personalityTest,
     tests,
     courses,
     personTypes,
