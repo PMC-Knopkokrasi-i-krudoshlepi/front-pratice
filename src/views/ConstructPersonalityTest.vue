@@ -1,4 +1,5 @@
 <template>
+  <h1>{{rightAnswers}}</h1>
   <div>
     <div class="head">
       <div class="nav-buttons pa-5">
@@ -56,8 +57,8 @@
         <v-card
           class="my-5"
           align="left"
-          v-for="(question, index) in questionsList"
-          :key="index"
+          v-for="(question, i) in questionsList"
+          :key="i"
         >
           <v-card-item>
             <v-card-title class="d-flex flex-row">
@@ -74,7 +75,7 @@
                       <v-btn
                         variant="outlined"
                         color="#D32F2F"
-                        v-on:click="questionsList.splice(index, 1)"
+                        v-on:click="questionsList.splice(i, 1)"
                         >Удалить</v-btn
                       >
                     </div>
@@ -93,7 +94,21 @@
                       :value="answer"
                       :key="index"
                       :label="answer.text"
+                      :checked="true"
                     ></v-radio>
+                  </div>
+                </v-radio-group>
+              </div>
+              <div v-if="question.questionType === 'Несколько из списка'">
+                <v-radio-group>
+                  <div>
+                    <v-checkbox
+                      v-for="(answer, index) in question.possibleAnswers"
+                      :value="answer"
+                      :key="index"
+                      :label="answer.text"
+                      :checked="false"
+                    ></v-checkbox>
                   </div>
                 </v-radio-group>
               </div>
@@ -158,7 +173,7 @@
                 class="d-flex"
               >
                 <v-checkbox
-                  :value="answ"
+                  :value="answ.text"
                   v-model="rightAnswers"
                   :label="`${answ.text}`"
                 >
@@ -193,8 +208,8 @@
                   class="d-flex"
                 >
                   <v-radio
-                    :value="answ"
-                    v-model="rightAnswers"
+                    :value="answ.text"
+                    v-model="rightAnswerForOneAndFreeQuestion"
                     :label="`${answ.text}`"
                   >
                   </v-radio>
@@ -251,6 +266,7 @@ export default {
       testName: "",
       testDescription: "",
       rightAnswers: [],
+      rightAnswerForOneAndFreeQuestion: "",
       questionName: "",
       questType: "",
       questionsList: [],
@@ -295,7 +311,7 @@ export default {
       this.questionsList.push({
         name: this.questionName,
         questionType: this.questType,
-        rightAnswers: [...this.rightAnswers],
+        rightAnswers: this.rightAnswers.length == 0 ? [this.rightAnswerForOneAndFreeQuestion] : [...this.rightAnswers],
         possibleAnswers: [...this.possibleAnswers],
       });
       console.log(this.questionsList);

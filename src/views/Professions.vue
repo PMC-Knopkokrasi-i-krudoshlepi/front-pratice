@@ -11,14 +11,6 @@
           to="/professions-constructor"
           >Добавить</v-btn
         >
-        <v-btn
-          class="ma-2 pa-2 mt-5"
-          prepend-icon="mdi-plus"
-          variant="outlined"
-          color="#2871E6"
-          @click="printAll"
-          >Test</v-btn
-        >
       </div>
     </div>
     <v-divider></v-divider>

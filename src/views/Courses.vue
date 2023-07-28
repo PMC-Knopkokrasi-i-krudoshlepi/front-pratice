@@ -14,5 +14,39 @@
       </div>
     </div>
     <v-divider></v-divider>
+    <CourseCard 
+        v-for="course in courses" 
+        :key="course.name" 
+        :title="course.name" 
+        :money="course.sallaryFrom" 
+        :description="course.description" />
   </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+import CourseCard from '../components/Cources/CourseCard.vue';
+export default {
+  components: {
+    CourseCard
+  },
+  data: () => ({
+    courses: []
+  }),
+  methods: {
+    printAll(){
+      console.log(this.courses);
+    }
+  },
+  computed: {
+    ...mapGetters('courses',
+      {
+        allCourses: 'allTypes'
+      }
+    )
+  },
+  async mounted() {
+    this.courses = await this.allCourses
+  },
+}
+</script>

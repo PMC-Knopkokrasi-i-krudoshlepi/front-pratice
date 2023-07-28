@@ -11,9 +11,9 @@ export default {
   mutations: {},
   state: {},
   getters: {
-    // async allTypes(state) {
-    //   const {data} = await httpClient.get("identity/getAllIdentities");
-    //   return data;
-    // },
+    async allTypes(state) {
+      const {data} = await httpClient.get("cources/getAllCources");
+      return data;
+    },
   },
 };
